@@ -1,6 +1,6 @@
 require File.expand_path("../../Abstract/abstract_belt", __FILE__)
 
-class BeltAtLatest < AbstractBelt
+class BeltATlatest < AbstractBelt
   version "latest"
   init
 end

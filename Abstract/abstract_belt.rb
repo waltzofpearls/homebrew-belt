@@ -2,10 +2,10 @@ require "formula"
 
 class AbstractBelt < Formula
   def self.init
-    homepage "https://github.com/waltzofpearls/belt"
+    homepage "https://github.com/waltzofpearls/dateparser"
     # https://github.com/syhw/homebrew/blob/master/Library/Contributions/example-formula.rb#L56-L62
     head do
-      url "https://github.com/waltzofpearls/belt.git", :branch => "main"
+      url "https://github.com/waltzofpearls/dateparser.git", :branch => "main"
       depends_on "rust" => :build
     end
     url artifact_url
@@ -32,7 +32,7 @@ class AbstractBelt < Formula
     if version.nil?
       version "latest"
     end
-    version == "latest" ? latest_url : "https://github.com/waltzofpearls/belt/releases/download/v#{version}/belt-#{version}-x86_64-apple-darwin.tar.gz"
+    version == "latest" ? latest_url : "https://github.com/waltzofpearls/dateparser/releases/download/v#{version}/belt-#{version}-macos-x86_64.zip"
   end
 
   def self.latest_url
@@ -40,7 +40,7 @@ class AbstractBelt < Formula
   end
 
   def self.assets
-    json = get "https://api.github.com/repos/waltzofpearls/belt/releases/latest"
+    json = get "https://api.github.com/repos/waltzofpearls/dateparser/releases/latest"
 
     if json['message'] =~ /API rate limit exceeded/
       raise json['message']
@@ -60,11 +60,11 @@ class AbstractBelt < Formula
 
     return latest_sha256sum if version == "latest"
 
-    `curl -L -s https://github.com/waltzofpearls/belt/releases/download/v#{version}/belt-#{version}-checksums.txt`.lines.grep(/#{download_file}/).first.split(' ').first
+    `curl -L -s https://github.com/waltzofpearls/dateparser/releases/download/v#{version}/checksums.txt`.lines.grep(/#{download_file}/).first.split(' ').first
   end
 
   def self.latest_sha256sum
-    checksum_assest = assets.select { |v| File.basename(v['browser_download_url']) =~ /belt-[0-9]\.[0-9]\.[0-9]-checksums.txt/ }
+    checksum_assest = assets.select { |v| File.basename(v['browser_download_url']) =~ /checksums.txt/ }
     if checksum_assest.empty?
       raise "Could not find checksum"
     end
@@ -73,8 +73,8 @@ class AbstractBelt < Formula
   end
 
   def self.download_file
-    return 'belt-[0-9]\.[0-9]\.[0-9]-x86_64-unknown-linux-gnu.tar.gz' if os == :linux
-    'belt-[0-9]\.[0-9]\.[0-9]-x86_64-apple-darwin.tar.gz'
+    return 'belt-[0-9]\.[0-9]\.[0-9]-x86_64-unknown-linux-musl.tar.gz' if os == :linux
+    'belt-[0-9]\.[0-9]\.[0-9]-macos-x86_64.zip'
   end
 
   def self.os
